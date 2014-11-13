@@ -1,0 +1,36 @@
+{
+  "name": "nodebb-plugin-sso-vkontakte",
+  "version": "0.2.0",
+  "description": "NodeBB Vkontakte SSO",
+  "main": "library.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Luchnik22/nodebb-plugin-sso-vkontakte"
+  },
+  "keywords": [
+    "nodebb",
+    "plugin",
+    "vkontakte",
+    "sso",
+    "single sign on",
+    "registration"
+  ],
+  "author": {
+    "name": "Loutchansky Oleg",
+    "email": "oleg@loutchansky"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Luchnik22/nodebb-plugin-sso-vkontakte/issues"
+  },
+  "dependencies": {
+    "passport-vkontakte": "~0.2.1"
+  },
+  "homepage": "https://github.com/Luchnik22/nodebb-plugin-sso-vkontakte",  
+  "maintainers": [
+    {
+      "name": "Oleg Loutchansky",
+      "email": "oleg@loutchansky.com"
+    }
+  ]
+}
