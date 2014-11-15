@@ -2,36 +2,23 @@
 	"use strict";
 
 	var User = module.parent.require('./user'),
-		meta = module.parent.require('./meta'),
 		db = module.parent.require('../src/database'),
+		meta = module.parent.require('./meta'),
 		passport = module.parent.require('passport'),
 		passportVK = require('passport-vkontakte').Strategy,
 		fs = module.parent.require('fs'),
-		path = module.parent.require('path'),
+		path = module.parent.require('path');
 		nconf = module.parent.require('nconf');
 
 	var constants = Object.freeze({
-		'name': "VK.com",
+		'name': "Vkontakte",
 		'admin': {
-			'route': '/vk',
-			'icon': 'fa-vk'
+			'icon': 'fa-vk',
+			'route': '/vkontakte'
 		}
 	});
 
 	var vkontakte = {};
-
-	vkontakte.init = function(app, middleware, controllers, callback) {
-		function render(req, res, next) {
-			res.render('sso/vk/admin', {});
-		}
-
-		app.get('/admin/vk', middleware.admin.buildHeader, render);
-		app.get('/api/admin/vk', render);
-
-		if (typeof callback === 'function') {
-            callback();
-        }
-	};
 
 	vkontakte.getStrategy = function(strategies, callback) {
 		meta.settings.get('sso-vk', function(err, settings) {
@@ -64,7 +51,7 @@
 
 	vkontakte.login = function(vkontakteID, username, email, callback) {
 		if (!email) {
-			email = username + '@users.noreply.vk.com';
+			email = username + '@users.noreply.vkontakte.com';
 		}
 		
 		vkontakte.getUidByvkontakteID(vkontakteID, function(err, uid) {
@@ -109,8 +96,9 @@
 		db.getObjectField('vkontakteid:uid', vkontakteID, function(err, uid) {
 			if (err) {
 				callback(err);
+			} else {
+				callback(null, uid);
 			}
-			callback(null, uid);			
 		});
 	};
 
@@ -122,6 +110,15 @@
 		});
 
 		callback(null, custom_header);
+	};
+
+	function renderAdmin(req, res, callback) {
+		res.render('sso/vkontakte/admin', {});
+	}
+
+	vkontakte.init = function(app, middleware, controllers) {
+		app.get('/admin/vkontakte', middleware.admin.buildHeader, renderAdmin);
+		app.get('/api/admin/vkontakte', renderAdmin);
 	};
 
 	module.exports = vkontakte;
