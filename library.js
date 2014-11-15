@@ -13,7 +13,7 @@
 	var constants = Object.freeze({
 		'name': "VK.com",
 		'admin': {
-			'route': '/plugins/sso-vk',
+			'route': '/vk',
 			'icon': 'fa-vk'
 		}
 	});
@@ -22,11 +22,11 @@
 
 	vkontakte.init = function(app, middleware, controllers, callback) {
 		function render(req, res, next) {
-			res.render('admin/plugins/sso-vk', {});
+			res.render('sso/vk/admin', {});
 		}
 
-		app.get('/admin/plugins/sso-vk', middleware.admin.buildHeader, render);
-		app.get('/api/admin/plugins/sso-vk', render);
+		app.get('/admin/vk', middleware.admin.buildHeader, render);
+		app.get('/api/admin/vk', render);
 
 		if (typeof callback === 'function') {
             callback();
