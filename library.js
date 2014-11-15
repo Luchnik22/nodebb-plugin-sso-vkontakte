@@ -22,7 +22,7 @@
 
 	vkontakte.init = function(app, middleware, controllers, callback) {
 		function render(req, res, next) {
-			res.render('admin/plugins/sso-vk', { });
+			res.render('admin/plugins/sso-vk', {});
 		}
 
 		app.get('/admin/plugins/sso-vk', middleware.admin.buildHeader, render);
@@ -124,5 +124,5 @@
 		callback(null, custom_header);
 	};
 
-	module.exports = Vkontakte;
+	module.exports = vkontakte;
 }(module));
