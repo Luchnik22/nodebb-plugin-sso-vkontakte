@@ -8,7 +8,6 @@
 		passportVK = require('passport-vkontakte').Strategy,
 		fs = module.parent.require('fs'),
 		path = module.parent.require('path');
-		nconf = module.parent.require('nconf');
 
 	var constants = Object.freeze({
 		'name': "Vkontakte",

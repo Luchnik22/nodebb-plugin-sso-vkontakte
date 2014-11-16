@@ -1,11 +1,11 @@
 {
   "name": "nodebb-plugin-sso-vkontakte",
-  "version": "0.2.1",
+  "version": "0.1.0",
   "description": "NodeBB Vkontakte SSO",
   "main": "library.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Luchnik22/nodebb-plugin-sso-vkontakte"
+    "url": "https://github.com/DriverPackSolution/nodebb-plugin-sso-vkontakte"
   },
   "keywords": [
     "nodebb",
@@ -16,21 +16,36 @@
     "registration"
   ],
   "author": {
-    "name": "Loutchansky Oleg",
-    "email": "oleg@loutchansky"
+    "name": "Artur Kuzyakov",
+    "email": "artx@drp.su"
   },
-  "license": "MIT",
+  "license": "BSD-2-Clause",
   "bugs": {
-    "url": "https://github.com/Luchnik22/nodebb-plugin-sso-vkontakte/issues"
+    "url": "https://github.com/DriverPackSolution/nodebb-plugin-sso-vkontakte/issues"
   },
   "dependencies": {
     "passport-vkontakte": "~0.2.1"
   },
-  "homepage": "https://github.com/Luchnik22/nodebb-plugin-sso-vkontakte",  
+  "homepage": "https://github.com/DriverPackSolution/nodebb-plugin-sso-vkontakte",
+  "_id": "nodebb-plugin-sso-vkontakte@0.1.0",
+  "_from": "nodebb-plugin-sso-vkontakte@latest",
+  "_npmVersion": "1.4.9",
+  "_npmUser": {
+    "name": "artx",
+    "email": "artx@drp.su"
+  },
   "maintainers": [
     {
-      "name": "Oleg Loutchansky",
-      "email": "oleg@loutchansky.com"
+      "name": "artx",
+      "email": "artx@drp.su"
     }
-  ]
+  ],
+  "directories": {},
+  "_shasum": "10f1c1b1df788cd0af34020dc0dbe70718f162c3",
+  "dist": {
+    "shasum": "10f1c1b1df788cd0af34020dc0dbe70718f162c3",
+    "tarball": "http://registry.npmjs.org/nodebb-plugin-sso-vkontakte/-/nodebb-plugin-sso-vkontakte-0.1.0.tgz"
+  },
+  "_resolved": "https://registry.npmjs.org/nodebb-plugin-sso-vkontakte/-/nodebb-plugin-sso-vkontakte-0.1.0.tgz",
+  "readme": "ERROR: No README data found!"
 }

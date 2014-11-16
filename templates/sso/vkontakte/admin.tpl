@@ -1,4 +1,4 @@
-<h1><i class="fa fa-vk"></i>Vkontakte Social Authentication</h1>
+<h1><i class="fa fa-vk"></i> Vkontakte Social Authentication</h1>
 <hr />
 
 <form class="sso-vk">
