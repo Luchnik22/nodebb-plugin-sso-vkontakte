@@ -7,7 +7,8 @@
 		passport = module.parent.require('passport'),
 		passportVK = require('passport-vkontakte').Strategy,
 		fs = module.parent.require('fs'),
-		path = module.parent.require('path');
+		path = module.parent.require('path'),
+		nconf = module.parent.require('nconf');
 
 	var constants = Object.freeze({
 		'name': "Vkontakte",
@@ -20,7 +21,7 @@
 	var vkontakte = {};
 
 	vkontakte.getStrategy = function(strategies, callback) {
-		meta.settings.get('sso-vk', function(err, settings) {
+		meta.settings.get('sso-vk', function(err, settings) {			
 			if (!err && settings['id'] && settings['secret']) {
 				passport.use(new passportVK({
 					clientID: settings['id'],

@@ -9,23 +9,32 @@
 			your application details here.	
 		</p>
 		<br />
-		<input type="text" data-field="id" title="Client ID" class="form-control input-lg" placeholder="Client ID"><br />
-		<input type="text" data-field="secret" title="Client Secret" class="form-control" placeholder="Client Secret"><br />
+		<input type="text" name="id" title="Client ID" class="form-control input-lg" placeholder="Client ID"><br />
+		<input type="text" name="secret" title="Client Secret" class="form-control" placeholder="Client Secret"><br />
 		<p class="help-block">
 			 Your callback URL is yourdomain.com/auth/vkontakte/callback
 		</p>
 	</div>
+	<button type="button" class="btn btn-lg btn-primary" id="save">Save</button>
 </form>
-
-<button class="btn btn-lg btn-primary" id="save">Save</button>
 
 <script>
 	require(['settings'], function(Settings) {
-		Settings.load('sso-vk', $('.sso-vk'));
+		var wrapper = $('.sso-vk');
+		Settings.load('sso-vk', wrapper);
 
 		$('#save').on('click', function() {
-			Settings.save('sso-vk', $('.sso-vk'));
+			Settings.save('sso-vk', wrapper, function() {
+				app.alert({
+					type: 'success',
+					alert_id: 'Vkontakte-settings',
+					title: 'Reload Required',
+					message: 'Please reload your NodeBB to have your changes take effect',
+					clickfn: function() {
+						socket.emit('admin.reload');
+					}
+				})
+			});
 		});
 	});
-
 </script>
