@@ -2,10 +2,10 @@
 	"use strict";
 
 	var User = module.parent.require('./user'),
-		db = module.parent.require('../src/database'),
 		meta = module.parent.require('./meta'),
+		db = module.parent.require('../src/database'),
 		passport = module.parent.require('passport'),
-		passportVK = require('passport-vkontakte').Strategy,
+		VKontakteStrategy = require('passport-vkontakte').Strategy,
 		fs = module.parent.require('fs'),
 		path = module.parent.require('path'),
 		nconf = module.parent.require('nconf');
@@ -14,7 +14,7 @@
 		'name': "Vkontakte",
 		'admin': {
 			'icon': 'fa-vk',
-			'route': '/vkontakte'
+			'route': '/plugins/sso-vkontakte'
 		}
 	});
 
@@ -22,37 +22,34 @@
 
 	vkontakte.getStrategy = function(strategies, callback) {
 		meta.settings.get('sso-vk', function(err, settings) {			
-			if (!err && settings['id'] && settings['secret']) {
-				passport.use(new passportVK({
+			if (!err && settings['id'] && settings['secret']) {				
+				passport.use(new VKontakteStrategy({
 					clientID: settings['id'],
 					clientSecret: settings['secret'],
-					callbackURL: nconf.get('url') + '/auth/vk/callback'
-				}, function(token, tokenSecret, params, profile, done) {
-					Vkontakte.login(profile.id, profile.displayName, params.email, function(err, user) {
-						if (err) {
+					callbackURL: nconf.get('url') + '/auth/vkontakte/callback'
+				}, function(accessToken, refreshToken, profile, done) {
+					vkontakte.login(profile.id, profile.displayName, function(err, user) {
+						if (err) {							
 							return done(err);
-						}
+						}						
 						done(null, user);
 					});
-				}));
-
+				}));				
+				
 				strategies.push({
 					name: 'vkontakte',
-					url: '/auth/vk/',
-					callbackURL: '/auth/vk/callback',
-					icon: 'vk fa-vk',
-					scope: 'email'
+					url: '/auth/vkontakte/',
+					callbackURL: '/auth/vkontakte/callback',
+					icon: 'fa-vk'					
 				});
 			}
 		});
-		
+	
 		callback(null, strategies);
 	};
 
-	vkontakte.login = function(vkontakteID, username, email, callback) {
-		if (!email) {
-			email = username + '@users.noreply.vkontakte.com';
-		}
+	vkontakte.login = function(vkontakteID, username, callback) {
+		var email = username + '@users.noreply.vkontakte.com';		
 		
 		vkontakte.getUidByvkontakteID(vkontakteID, function(err, uid) {
 			if (err) {
@@ -70,16 +67,21 @@
 				var success = function(uid) {
 					User.setUserField(uid, 'vkontakteid', vkontakteID);
 					db.setObjectField('vkontakteid:uid', vkontakteID, uid);
+
 					callback(null, {
 						uid: uid
 					});
 				};
 
 				User.getUidByEmail(email, function(err, uid) {
+					if (err) {
+						return callback(err);
+					}
+
 					if (!uid) {
 						User.create({username: username, email: email}, function(err, uid) {
 							if (err !== null) {
-								callback(err);
+								return callback(err);
 							} else {
 								success(uid);
 							}
@@ -95,10 +97,9 @@
 	vkontakte.getUidByvkontakteID = function(vkontakteID, callback) {
 		db.getObjectField('vkontakteid:uid', vkontakteID, function(err, uid) {
 			if (err) {
-				callback(err);
-			} else {
-				callback(null, uid);
+				return callback(err);
 			}
+			callback(null, uid);			
 		});
 	};
 
@@ -112,13 +113,24 @@
 		callback(null, custom_header);
 	};
 
-	function renderAdmin(req, res, callback) {
-		res.render('sso/vkontakte/admin', {});
-	}
+	vkontakte.init = function(app, middleware, controllers, callback) {
+		function render(req, res, next) {
+			res.render('admin/plugins/sso-vkontakte', {});
+		}
 
-	vkontakte.init = function(app, middleware, controllers) {
-		app.get('/admin/vkontakte', middleware.admin.buildHeader, renderAdmin);
-		app.get('/api/admin/vkontakte', renderAdmin);
+		// console.log(params);
+		app.get('/admin/plugins/sso-vkontakte', middleware.admin.buildHeader, render);
+		app.get('/api/admin/plugins/sso-vkontakte', render);
+
+		app.get('/auth/vkontakte', passport.authenticate('vkontakte'));
+		app.get('/auth/vkontakte/callback', 
+			passport.authenticate('vkontakte', { failureRedirect: '/login' }),
+			function(req, res) {				
+    			res.redirect('/');
+    		}
+		);
+
+		callback();
 	};
 
 	module.exports = vkontakte;
